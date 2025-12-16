@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xs.booksystem.mapper.BookMapper">
+
+    <resultMap id="BaseResultMap" type="com.xs.booksystem.pojo.DTO.BookDTO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="isbn" column="isbn" jdbcType="VARCHAR"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="author" column="author" jdbcType="VARCHAR"/>
+            <result property="publisher" column="publisher" jdbcType="VARCHAR"/>
+            <result property="publishDate" column="publish_date" jdbcType="DATE"/>
+            <result property="categoryId" column="category_id" jdbcType="INTEGER"/>
+            <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="coverImage" column="cover_image" jdbcType="VARCHAR"/>
+            <result property="totalCopies" column="total_copies" jdbcType="INTEGER"/>
+            <result property="availableCopies" column="available_copies" jdbcType="INTEGER"/>
+            <result property="isRecommended" column="is_recommended" jdbcType="TINYINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,isbn,title,
+        author,publisher,publish_date,
+        category_id,description,cover_image,
+        total_copies,available_copies,is_recommended,
+        create_time,update_time
+    </sql>
+</mapper>
