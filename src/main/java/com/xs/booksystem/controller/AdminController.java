@@ -31,6 +31,17 @@ public class AdminController {
     /**
      * 添加图书
      * @param bookDO
+     * isbn
+     * title
+     * author
+     * publisher
+     * publishDate
+     * categoryId
+     * description
+     * coverImage
+     * totalCopies
+     * availableCopies
+     * isRecommended
      * @return
      */
     @PostMapping("/addBook")
@@ -44,6 +55,7 @@ public class AdminController {
     /**
      * 删除图书
      * @param bookDOs
+     * id
      * @return
      */
     @PostMapping("/deleteBook")
@@ -57,6 +69,18 @@ public class AdminController {
     /**
      * 修改图书
      * @param bookDO
+     * id
+     * isbn
+     * title
+     * author
+     * publisher
+     * publishDate
+     * categoryId
+     * description
+     * coverImage
+     * totalCopies
+     * availableCopies
+     * isRecommended
      * @return
      */
     @PostMapping("/updateBook")
@@ -71,6 +95,17 @@ public class AdminController {
     /**
      * 查询图书
      * @param bookDO
+     * isbn
+     * title
+     * author
+     * publisher
+     * publishDate
+     * categoryId
+     * description
+     * coverImage
+     * totalCopies
+     * availableCopies
+     * isRecommended
      * @return
      */
     @PostMapping("/queryBooks")
@@ -115,6 +150,7 @@ public class AdminController {
     /**
      * 删除用户
      * @param userDOs
+     *  id
      * @return
      */
     @PostMapping("/deleteUsers")
@@ -142,6 +178,7 @@ public class AdminController {
     /**
      * 删除借阅记录
      * @param borrowRecords
+     *  id
      * @return
      */
     @PostMapping("/deleteBorrowRecords")
@@ -156,6 +193,11 @@ public class AdminController {
     /**
      * 添加借阅记录
       * @param borrowRecordDO
+     * id
+     * userId
+     * bookId
+     * borrowTime
+     * returnTime
      * @return
      */
     @PostMapping("/addBorrowRecord")
@@ -169,6 +211,12 @@ public class AdminController {
     /**
      * 修改借阅记录
      * @param borrowRecordDO
+     * id
+     * userId
+     * bookId
+     * borrowTime
+     * returnTime
+     * status
      * @return
      */
     @PostMapping("/updateBorrowRecord")
