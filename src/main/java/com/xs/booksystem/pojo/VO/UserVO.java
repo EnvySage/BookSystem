@@ -37,6 +37,7 @@ public class UserVO implements Serializable {
      */
     private String phone;
 
+    private String token;
     /**
      * 角色：ADMIN-管理员, USER-普通用户
      */

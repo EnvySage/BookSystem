@@ -47,11 +47,8 @@ public class AdminController {
      */
     @PostMapping("/addBook")
     public Result<BookDO> addBook(@RequestBody BookDO bookDO){
-        if (bookDO == null) return Result.error("参数错误");
         Integer success = bookService.addBook(bookDO);
-        if (success == 0){
-            return Result.error("添加失败");
-        }else return Result.success("添加成功",bookDO);
+        return Result.success("添加成功", bookDO);
     }
     /**
      * 删除图书
@@ -61,11 +58,8 @@ public class AdminController {
      */
     @PostMapping("/deleteBook")
     public Result<String> deleteBook(@RequestBody List<BookDO> bookDOs){
-        if (bookDOs == null) return Result.error("参数错误");
         Integer success = bookService.deleteBook(bookDOs);
-        if (success == 0){
-            return Result.error("删除失败");
-        }else return Result.success("删除成功");
+        return Result.success("删除成功");
     }
     /**
      * 修改图书
@@ -86,11 +80,8 @@ public class AdminController {
      */
     @PostMapping("/updateBook")
     public Result<BookVO> updateBook(@RequestBody BookDO bookDO){
-        if (bookDO == null) return Result.error("参数错误");
         BookVO bookVO = bookService.updateBook(bookDO);
-        if (bookVO == null){
-            return Result.error("修改失败");
-        }else return Result.success("修改成功",bookVO);
+        return Result.success("修改成功", bookVO);
     }
 
     /**
@@ -111,14 +102,11 @@ public class AdminController {
      */
     @PostMapping("/queryBooks")
     public Result<List<BookVO>> queryBook(@RequestBody BookDO bookDO){
-        if (bookDO == null) return Result.error("参数错误");
         List<BookVO> bookVOs = bookService.queryBook(bookDO);
         for (BookVO bookVO : bookVOs){
             bookVO.setCategoryName(bookCategoryService.queryBookCategoryById(bookVO.getCategoryId()).getName());
         }
-        if (bookVOs.size() == 0){
-            return Result.error("查询失败");
-        }else return Result.success("查询成功",bookVOs);
+        return Result.success("查询成功", bookVOs);
     }
 
     /**
@@ -131,9 +119,7 @@ public class AdminController {
         for (BookVO bookVO : bookVOs){
             bookVO.setCategoryName(bookCategoryService.queryBookCategoryById(bookVO.getCategoryId()).getName());
         }
-        if (bookVOs.size() == 0){
-            return Result.error("查询失败");
-        }else return Result.success("查询成功",bookVOs);
+        return Result.success("查询成功", bookVOs);
     }
 
     /**
@@ -143,9 +129,7 @@ public class AdminController {
     @GetMapping("/queryAllUsers")
     public Result<List<UserVO>> queryAllUsers(){
         List<UserVO> users = userService.queryAllUsers();
-        if (users == null){
-            return Result.error("查询失败");
-        }else return Result.success("查询成功",users);
+        return Result.success("查询成功", users);
     }
 
     /**
@@ -156,11 +140,8 @@ public class AdminController {
      */
     @PostMapping("/deleteUsers")
     public Result<String> deleteUsers(@RequestBody List<UserDO> userDOs){
-        if (userDOs == null) return Result.error("参数错误");
         Integer success = userService.deleteUsers(userDOs);
-        if (success == 0){
-            return Result.error("删除失败");
-        }else return Result.success("删除成功");
+        return Result.success("删除成功");
     }
 
     /**
@@ -171,9 +152,7 @@ public class AdminController {
     @GetMapping("/queryBorrowRecords")
     public Result<List<BorrowRecordVO>> queryBorrowRecords(){
         List<BorrowRecordVO> borrowRecords = borrowRecordService.queryBorrowRecords(BaseContext.getCurrentId());
-        if (borrowRecords == null){
-            return Result.error("查询失败");
-        }else return Result.success("查询成功",borrowRecords);
+        return Result.success("查询成功", borrowRecords);
     }
 
     /**
@@ -184,11 +163,8 @@ public class AdminController {
      */
     @PostMapping("/deleteBorrowRecords")
     public Result<String> deleteBorrowRecords(@RequestBody List<BorrowRecordDO> borrowRecords){
-        if (borrowRecords == null) return Result.error("参数错误");
         Integer success = borrowRecordService.deleteBorrowRecords(borrowRecords);
-        if (success == 0){
-            return Result.error("删除失败");
-        }else return Result.success("删除成功");
+        return Result.success("删除成功");
     }
 
     /**
@@ -203,11 +179,8 @@ public class AdminController {
      */
     @PostMapping("/addBorrowRecord")
     public Result<BorrowRecordVO> addBorrowRecord(@RequestBody BorrowRecordDO borrowRecordDO){
-        if (borrowRecordDO == null) return Result.error("参数错误");
         BorrowRecordVO borrowRecordVO = borrowRecordService.addBorrowRecord(borrowRecordDO);
-        if (borrowRecordVO == null){
-             return Result.error("添加失败");
-        }else return Result.success("添加成功",borrowRecordVO);
+        return Result.success("添加成功", borrowRecordVO);
     }
     /**
      * 修改借阅记录
@@ -222,11 +195,8 @@ public class AdminController {
      */
     @PostMapping("/updateBorrowRecord")
     public Result<BorrowRecordVO> updateBorrowRecord(@RequestBody BorrowRecordDO borrowRecordDO){
-        if (borrowRecordDO == null) return Result.error("参数错误");
         BorrowRecordVO borrowRecordVO = borrowRecordService.updateBorrowRecord(borrowRecordDO);
-        if (borrowRecordVO == null){
-            return Result.error("修改失败");
-        }else return Result.success("修改成功",borrowRecordVO);
+        return Result.success("修改成功", borrowRecordVO);
     }
     /**
      * 获取分类列表
@@ -235,9 +205,7 @@ public class AdminController {
     @GetMapping("/queryBookCategory")
     public Result<List<BookCategoryVO>> queryBookCategory(){
         List<BookCategoryVO> bookCategoryVOS = bookCategoryService.queryBookCategory();
-        if (bookCategoryVOS == null){
-            return Result.error("查询失败");
-        }else return Result.success("查询成功",bookCategoryVOS);
+        return Result.success("查询成功", bookCategoryVOS);
     }
 
     /**
@@ -247,8 +215,6 @@ public class AdminController {
     @GetMapping("/queryRecommendedBooks")
     public Result<List<BookVO>> queryRecommendedBooks(){
         List<BookVO> bookVOs = bookService.queryRecommendedBooks();
-        if (bookVOs == null){
-            return Result.error("查询失败");
-        }else return Result.success("查询成功",bookVOs);
+        return Result.success("查询成功", bookVOs);
     }
 }

@@ -17,6 +17,17 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    timeout: 10000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1ms
 
 mybatis-plus:
   global-config:
@@ -28,3 +39,12 @@ mybatis-plus:
 jwt:
   secret: MySuperSecureJwtSecretKeyForBookSystem20251229
   expiration: 259200
+
+logging:
+  level:
+    com.com.xs: INFO
+    org.springframework.web: WARN  # 减少Spring框架日志
+    org.mybatis: WARN              # 生产环境建议改为WARN
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %highlight(%-5level) [thread] %cyan(%-15.15logger{0}) - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{30} - %msg%n"

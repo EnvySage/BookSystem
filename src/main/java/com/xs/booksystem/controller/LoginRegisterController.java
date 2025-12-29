@@ -47,7 +47,7 @@ public class LoginRegisterController {
      * @return token
      */
     @PostMapping("/login")
-    public Result<String> login(@RequestBody UserDO userDO){
+    public Result<UserVO> login(@RequestBody UserDO userDO){
         String username = userDO.getUsername();
         String password = userDO.getPassword();
         if (username == null || username.isEmpty()) return Result.error("用户名不能为空");
@@ -55,7 +55,8 @@ public class LoginRegisterController {
         UserVO userVO = userService.getUserByUsername(username);
         if (userVO == null) return Result.error("用户不存在");
         String token =jwtUtils.generateToken(userVO.getId(), username);
-        return Result.success(token);
+        userVO.setToken(token);
+        return Result.success(userVO);
     }
 
     /**
@@ -64,10 +65,11 @@ public class LoginRegisterController {
      * @return
      */
     @PostMapping("/token")
-    public Result<String> token(String token){
+    public Result<UserVO> token(String token){
         boolean validate = jwtUtils.validateToken(token);
         if (validate){
-            return Result.success("token验证成功");
+            UserVO userVO = userService.getUserById(jwtUtils.getUserIdFromToken(token));
+            return Result.success(userVO);
         }
         else {
             return Result.error("token可能过期");

@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -49,6 +50,7 @@ public class BorrowRecordServiceImpl implements BorrowRecordService{
         return borrowRecordVOList;
     }
 
+    @Transactional
     @Override
     public Integer deleteBorrowRecords(List<BorrowRecordDO> borrowRecords) {
         logger.info("删除借阅记录，记录数: {}", borrowRecords != null ? borrowRecords.size() : 0);
@@ -62,6 +64,7 @@ public class BorrowRecordServiceImpl implements BorrowRecordService{
         return 0;
     }
 
+    @Transactional
     @Override
     public BorrowRecordVO addBorrowRecord(BorrowRecordDO borrowRecordDO) {
         logger.info("添加借阅记录: 用户ID={}, 图书ID={}", borrowRecordDO.getUserId(), borrowRecordDO.getBookId());
@@ -74,6 +77,7 @@ public class BorrowRecordServiceImpl implements BorrowRecordService{
         return borrowRecordVO;
     }
 
+    @Transactional
     @Override
     public BorrowRecordVO updateBorrowRecord(BorrowRecordDO borrowRecordDO) {
         logger.info("更新借阅记录: 记录ID={}", borrowRecordDO.getId());

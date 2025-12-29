@@ -9,6 +9,7 @@ import com.xs.booksystem.mapper.UserMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    @Transactional
     @Override
     public Integer deleteUsers(List<UserDO> users) {
         Set<Integer> ids = users.stream().map(UserDO::getId).collect(Collectors.toSet());
@@ -58,10 +60,22 @@ public class UserServiceImpl implements UserService{
         return userVO;
     }
 
+    @Transactional
     @Override
     public void insertUser(UserDO userDO) {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(userDO,userDTO);
         userMapper.insert(userDTO);
+    }
+
+    @Override
+    public UserVO getUserById(Integer userIdFromToken) {
+        UserDTO userDTO = userMapper.selectById(userIdFromToken);
+        if (userDTO == null){
+            return null;
+        }
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(userDTO,userVO);
+        return userVO;
     }
 }

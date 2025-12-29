@@ -3,20 +3,21 @@ package com.xs.booksystem.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
+@Data
 public class JwtUtils {
 
 
     @Value("${jwt.secret}")
     private String SECRET;
 
-    // JWT过期时间，设置为24小时
-    @Value("${jwt.expiration}")
+    @Value("${jwt.expiration:86400000}")
     private long EXPIRATION_TIME;
 
     /**

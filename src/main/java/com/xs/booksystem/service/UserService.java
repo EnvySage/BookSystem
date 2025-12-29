@@ -21,4 +21,6 @@ public interface UserService{
     UserVO getUserByUsername(String username);
 
     void insertUser(UserDO userDO);
+
+    UserVO getUserById(Integer userIdFromToken);
 }
