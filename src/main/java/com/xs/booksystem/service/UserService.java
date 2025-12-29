@@ -1,6 +1,7 @@
 package com.xs.booksystem.service;
 
 import com.xs.booksystem.pojo.DO.UserDO;
+import com.xs.booksystem.pojo.DTO.UserDTO;
 import com.xs.booksystem.pojo.VO.UserVO;
 
 import java.util.List;
@@ -16,4 +17,8 @@ public interface UserService{
     List<UserVO> queryAllUsers();
 
     Integer deleteUsers(List<UserDO> users);
+
+    UserVO getUserByUsername(String username);
+
+    void insertUser(UserDO userDO);
 }

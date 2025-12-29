@@ -44,4 +44,24 @@ public class UserServiceImpl implements UserService{
         return userMapper.delete(queryWrapper);
 
     }
+
+    @Override
+    public UserVO getUserByUsername(String username) {
+        LambdaQueryWrapper<UserDTO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserDTO::getUsername,username);
+        UserDTO userDTO = userMapper.selectOne(queryWrapper);
+        if(userDTO == null){
+            return null;
+        }
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(userDTO,userVO);
+        return userVO;
+    }
+
+    @Override
+    public void insertUser(UserDO userDO) {
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(userDO,userDTO);
+        userMapper.insert(userDTO);
+    }
 }

@@ -1,5 +1,6 @@
 package com.xs.booksystem.controller;
 
+import com.xs.booksystem.Context.BaseContext;
 import com.xs.booksystem.pojo.DO.BookDO;
 import com.xs.booksystem.pojo.DO.BorrowRecordDO;
 import com.xs.booksystem.pojo.Result;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -92,12 +94,12 @@ public class UserController {
 
     /**
      * 查询借阅记录
-     * @param userId
+     * @param
      * @return
      */
-    @GetMapping("/queryBorrowRecords/{userId}")
-    public Result<List<BorrowRecordVO>> queryBorrowRecords(@PathVariable("userId") Integer userId){
-        List<BorrowRecordVO> borrowRecords = borrowRecordService.queryBorrowRecords(userId);
+    @GetMapping("/queryBorrowRecords")
+    public Result<List<BorrowRecordVO>> queryBorrowRecords(){
+        List<BorrowRecordVO> borrowRecords = borrowRecordService.queryBorrowRecords(BaseContext.getCurrentId());
         if (borrowRecords == null){
             logger.info("查询借阅记录失败");
             return Result.error("查询失败");
@@ -110,29 +112,43 @@ public class UserController {
     /**
      * 添加借阅记录
       * @param borrowRecordDO
-     * 传输参数：bookId, userId, borrowTime, dueTime, status
+     * 传输参数：bookId, borrowTime, dueTime
      * @return
      */
     @PostMapping("/addBorrowRecord")
     public Result<BorrowRecordVO> addBorrowRecord(@RequestBody BorrowRecordDO borrowRecordDO){
-        BorrowRecordVO borrowRecordVO = borrowRecordService.addBorrowRecord(borrowRecordDO);
-        if (borrowRecordVO == null){
-            logger.info("添加借阅记录失败");
-            return Result.error("添加失败");
+        borrowRecordDO.setUserId(BaseContext.getCurrentId());
+        borrowRecordDO.setStatus("BORROWED");
+        Integer stocks = bookService.queryStockById(borrowRecordDO.getBookId());
+        if (stocks == 0) {
+            logger.info("图书库存不足，无法借阅");
+            return Result.error("借阅失败");
         }else {
-            logger.info("添加借阅记录成功");
-            return Result.success("添加成功", borrowRecordVO);
+            BorrowRecordVO borrowRecordVO = borrowRecordService.addBorrowRecord(borrowRecordDO);
+            if (borrowRecordVO == null) {
+                logger.info("添加借阅记录失败");
+                return Result.error("添加失败");
+            } else {
+                // 更新图书库存
+                BookDO updateBook = new BookDO();
+                updateBook.setId(borrowRecordDO.getBookId());
+                updateBook.setAvailableCopies(stocks - 1);
+                bookService.updateBook(updateBook);
+                logger.info("添加借阅记录成功");
+                return Result.success("添加成功", borrowRecordVO);
+            }
         }
     }
 
     /**
      * 修改借阅记录
      * @param borrowRecordDO
-     * 传输参数：dueTime
+     * 传输参数：id,dueTime
      * @return
      */
      @PostMapping("/updateBorrowRecord")
     public Result<BorrowRecordVO> updateBorrowRecord(@RequestBody BorrowRecordDO borrowRecordDO){
+         borrowRecordDO.setUserId(BaseContext.getCurrentId());
         BorrowRecordVO borrowRecordVO = borrowRecordService.updateBorrowRecord(borrowRecordDO);
         if (borrowRecordVO == null){
             logger.info("修改借阅记录失败");
@@ -146,11 +162,19 @@ public class UserController {
     /**
      * 完成借阅
      * @param borrowRecordDO
-     * 传输参数：userId, bookId, returnTime, status
+     * 传输参数：id,bookId
      * @return
      */
      @PostMapping("/returnBook")
     public Result<BorrowRecordVO> returnBook(@RequestBody BorrowRecordDO borrowRecordDO){
+         borrowRecordDO.setUserId(BaseContext.getCurrentId());
+         borrowRecordDO.setReturnTime(LocalDate.now());
+         borrowRecordDO.setStatus("RETURNED");
+         BookDO bookDO = new BookDO();
+         Integer stocks = bookService.queryStockById(borrowRecordDO.getBookId());
+         bookDO.setId(borrowRecordDO.getBookId());
+         bookDO.setAvailableCopies(stocks + 1);
+         bookService.updateBook(bookDO);
         BorrowRecordVO borrowRecordVO = borrowRecordService.updateBorrowRecord(borrowRecordDO);
         if (borrowRecordVO == null){
             logger.info("归还失败");

@@ -1,5 +1,6 @@
 package com.xs.booksystem.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xs.booksystem.pojo.DO.BookDO;
 import com.xs.booksystem.pojo.DTO.BookDTO;
@@ -11,6 +12,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.stream.events.DTD;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -107,6 +109,31 @@ public class BookServiceImpl implements BookService{
             BeanUtils.copyProperties(dto, bookVO);
             return bookVO;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Integer queryStockById(Integer bookId) {
+        LambdaQueryWrapper<BookDTO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(BookDTO::getId, bookId);
+        Integer stocks = bookMapper.selectOne(queryWrapper).getAvailableCopies();
+        return stocks;
+    }
+
+    @Override
+    public List<BookVO> queryRecommendedBooks() {
+        LambdaQueryWrapper<BookDTO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(BookDTO::getIsRecommended, 1);
+        List<BookDTO> bookDTOList = bookMapper.selectList(queryWrapper);
+        return bookDTOList.stream().map(dto -> {
+            BookVO bookVO = new BookVO();
+            BeanUtils.copyProperties(dto, bookVO);
+            return bookVO;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public BookDTO getBookById(BookDTO bookDTO) {
+        return bookMapper.selectById(bookDTO.getId());
     }
 
 }

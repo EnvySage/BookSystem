@@ -31,6 +31,7 @@ public class BorrowRecordVO implements Serializable {
      * 图书ID
      */
     private Integer bookId;
+    private String bookName;
 
     /**
      * 借阅时间

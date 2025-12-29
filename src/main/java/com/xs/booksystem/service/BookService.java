@@ -22,4 +22,10 @@ public interface BookService{
     List<BookVO> queryBook(BookDO bookDO);
 
     List<BookVO> queryAllBooks();
+
+    Integer queryStockById(Integer bookId);
+
+    List<BookVO> queryRecommendedBooks();
+
+    BookDTO getBookById(BookDTO bookDTO);
 }

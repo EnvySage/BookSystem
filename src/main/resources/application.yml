@@ -26,5 +26,5 @@ mybatis-plus:
     map-underscore-to-camel-case: true
 
 jwt:
-  secret: library_system
+  secret: MySuperSecureJwtSecretKeyForBookSystem20251229
   expiration: 259200

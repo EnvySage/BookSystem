@@ -1,5 +1,6 @@
 package com.xs.booksystem.controller;
 
+import com.xs.booksystem.Context.BaseContext;
 import com.xs.booksystem.pojo.DO.BookDO;
 import com.xs.booksystem.pojo.DO.BorrowRecordDO;
 import com.xs.booksystem.pojo.DO.UserDO;
@@ -164,12 +165,12 @@ public class AdminController {
 
     /**
      * 查询借阅记录
-     * @param userId
-     * @return
+     * @param
+     * @return borrowRecords
      */
-    @GetMapping("/queryBorrowRecords/{userId}")
-    public Result<List<BorrowRecordVO>> queryBorrowRecords(@PathVariable("userId") Integer userId){
-        List<BorrowRecordVO> borrowRecords = borrowRecordService.queryBorrowRecords(userId);
+    @GetMapping("/queryBorrowRecords")
+    public Result<List<BorrowRecordVO>> queryBorrowRecords(){
+        List<BorrowRecordVO> borrowRecords = borrowRecordService.queryBorrowRecords(BaseContext.getCurrentId());
         if (borrowRecords == null){
             return Result.error("查询失败");
         }else return Result.success("查询成功",borrowRecords);
@@ -237,5 +238,17 @@ public class AdminController {
         if (bookCategoryVOS == null){
             return Result.error("查询失败");
         }else return Result.success("查询成功",bookCategoryVOS);
+    }
+
+    /**
+     * 获取推荐图书列表
+     * @return bookVOs
+     */
+    @GetMapping("/queryRecommendedBooks")
+    public Result<List<BookVO>> queryRecommendedBooks(){
+        List<BookVO> bookVOs = bookService.queryRecommendedBooks();
+        if (bookVOs == null){
+            return Result.error("查询失败");
+        }else return Result.success("查询成功",bookVOs);
     }
 }

@@ -2,8 +2,10 @@ package com.xs.booksystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.xs.booksystem.pojo.DO.BorrowRecordDO;
+import com.xs.booksystem.pojo.DTO.BookDTO;
 import com.xs.booksystem.pojo.DTO.BorrowRecordDTO;
 import com.xs.booksystem.pojo.VO.BorrowRecordVO;
+import com.xs.booksystem.service.BookService;
 import com.xs.booksystem.service.BorrowRecordService;
 import com.xs.booksystem.mapper.BorrowRecordMapper;
 import org.slf4j.Logger;
@@ -26,6 +28,8 @@ public class BorrowRecordServiceImpl implements BorrowRecordService{
     private static final Logger logger = LoggerFactory.getLogger(BorrowRecordServiceImpl.class);
     @Autowired
     private BorrowRecordMapper borrowRecordMapper;
+    @Autowired
+    private BookService bookService;
     @Override
     public List<BorrowRecordVO> queryBorrowRecords(Integer userId) {
         logger.info("查询用户ID为 {} 的借阅记录", userId);
@@ -34,7 +38,11 @@ public class BorrowRecordServiceImpl implements BorrowRecordService{
         List<BorrowRecordDTO> borrowRecordDTOList = borrowRecordMapper.selectList(queryWrapper);
         List<BorrowRecordVO> borrowRecordVOList = borrowRecordDTOList.stream().map(dto -> {
             BorrowRecordVO borrowRecordVO = new BorrowRecordVO();
+            BookDTO bookDTO = new BookDTO();
+            bookDTO.setId(dto.getBookId());
+            bookDTO = bookService.getBookById(bookDTO);
             BeanUtils.copyProperties(dto, borrowRecordVO);
+            borrowRecordVO.setBookName(bookDTO.getTitle());
             return borrowRecordVO;
         }).collect(Collectors.toList());
         logger.info("查询到 {} 条借阅记录", borrowRecordVOList.size());
