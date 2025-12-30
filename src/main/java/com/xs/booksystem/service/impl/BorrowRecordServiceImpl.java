@@ -1,6 +1,7 @@
 package com.xs.booksystem.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.xs.booksystem.Context.BaseContext;
 import com.xs.booksystem.pojo.DO.BorrowRecordDO;
 import com.xs.booksystem.pojo.DTO.BookDTO;
 import com.xs.booksystem.pojo.DTO.BorrowRecordDTO;
@@ -33,21 +34,37 @@ public class BorrowRecordServiceImpl implements BorrowRecordService{
     private BookService bookService;
     @Override
     public List<BorrowRecordVO> queryBorrowRecords(Integer userId) {
-        logger.info("查询用户ID为 {} 的借阅记录", userId);
-        LambdaQueryWrapper<BorrowRecordDTO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(BorrowRecordDTO::getUserId,userId);
-        List<BorrowRecordDTO> borrowRecordDTOList = borrowRecordMapper.selectList(queryWrapper);
-        List<BorrowRecordVO> borrowRecordVOList = borrowRecordDTOList.stream().map(dto -> {
-            BorrowRecordVO borrowRecordVO = new BorrowRecordVO();
-            BookDTO bookDTO = new BookDTO();
-            bookDTO.setId(dto.getBookId());
-            bookDTO = bookService.getBookById(bookDTO);
-            BeanUtils.copyProperties(dto, borrowRecordVO);
-            borrowRecordVO.setBookName(bookDTO.getTitle());
-            return borrowRecordVO;
-        }).collect(Collectors.toList());
-        logger.info("查询到 {} 条借阅记录", borrowRecordVOList.size());
-        return borrowRecordVOList;
+        if (BaseContext.getCurrentRole() == "ADMIN"){
+            logger.info("查询所有借阅记录");
+            List<BorrowRecordDTO> borrowRecordDTOList = borrowRecordMapper.selectList(null);
+            List<BorrowRecordVO> borrowRecordVOList = borrowRecordDTOList.stream().map(dto -> {
+                BorrowRecordVO borrowRecordVO = new BorrowRecordVO();
+                BookDTO bookDTO = new BookDTO();
+                bookDTO.setId(dto.getBookId());
+                bookDTO = bookService.getBookById(bookDTO);
+                BeanUtils.copyProperties(dto, borrowRecordVO);
+                borrowRecordVO.setBookName(bookDTO.getTitle());
+                return borrowRecordVO;
+            }).collect(Collectors.toList());
+            return borrowRecordVOList;
+        }
+        else {
+            logger.info("查询用户ID为 {} 的借阅记录", userId);
+            LambdaQueryWrapper<BorrowRecordDTO> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(BorrowRecordDTO::getUserId,userId);
+            List<BorrowRecordDTO> borrowRecordDTOList = borrowRecordMapper.selectList(queryWrapper);
+            List<BorrowRecordVO> borrowRecordVOList = borrowRecordDTOList.stream().map(dto -> {
+                BorrowRecordVO borrowRecordVO = new BorrowRecordVO();
+                BookDTO bookDTO = new BookDTO();
+                bookDTO.setId(dto.getBookId());
+                bookDTO = bookService.getBookById(bookDTO);
+                BeanUtils.copyProperties(dto, borrowRecordVO);
+                borrowRecordVO.setBookName(bookDTO.getTitle());
+                return borrowRecordVO;
+            }).collect(Collectors.toList());
+            logger.info("查询到 {} 条借阅记录", borrowRecordVOList.size());
+            return borrowRecordVOList;
+        }
     }
 
     @Transactional

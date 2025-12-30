@@ -34,6 +34,11 @@ public class JwtInterceptor implements HandlerInterceptor {
             return false;
         }
         BaseContext.setCurrentId(jwtUtils.getUserIdFromToken(token));
+        if(BaseContext.getCurrentId() == 1){
+            BaseContext.setCurrentRole("ADMIN");
+        }else {
+            BaseContext.setCurrentRole("USER");
+        }
         log.info("当前用户id:{}",BaseContext.getCurrentId());
         return true;
     }
