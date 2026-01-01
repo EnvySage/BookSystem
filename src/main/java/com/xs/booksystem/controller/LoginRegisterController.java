@@ -7,7 +7,10 @@ import com.xs.booksystem.service.UserService;
 import com.xs.booksystem.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+/**
+ * 登录注册
+ * 由 23053047 黄宇斌 编写
+ */
 @RestController
 @RequestMapping("/sign")
 public class LoginRegisterController {
@@ -65,7 +68,7 @@ public class LoginRegisterController {
      * @return
      */
     @PostMapping("/token")
-    public Result<UserVO> token(String token){
+    public Result<UserVO> token(@RequestBody String token){
         boolean validate = jwtUtils.validateToken(token);
         if (validate){
             UserVO userVO = userService.getUserById(jwtUtils.getUserIdFromToken(token));

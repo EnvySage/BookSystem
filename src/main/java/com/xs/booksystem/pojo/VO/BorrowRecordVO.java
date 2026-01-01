@@ -26,7 +26,7 @@ public class BorrowRecordVO implements Serializable {
      * 用户ID
      */
     private Integer userId;
-
+    private String userName;
     /**
      * 图书ID
      */

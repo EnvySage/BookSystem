@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+/**
+ * JWT工具类
+ * 由 23053052 李邓活 编写
+ */
 @Component
 @Data
 public class JwtUtils {

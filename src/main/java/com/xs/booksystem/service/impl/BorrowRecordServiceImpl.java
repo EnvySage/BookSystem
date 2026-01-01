@@ -5,10 +5,13 @@ import com.xs.booksystem.Context.BaseContext;
 import com.xs.booksystem.pojo.DO.BorrowRecordDO;
 import com.xs.booksystem.pojo.DTO.BookDTO;
 import com.xs.booksystem.pojo.DTO.BorrowRecordDTO;
+import com.xs.booksystem.pojo.DTO.UserDTO;
 import com.xs.booksystem.pojo.VO.BorrowRecordVO;
+import com.xs.booksystem.pojo.VO.UserVO;
 import com.xs.booksystem.service.BookService;
 import com.xs.booksystem.service.BorrowRecordService;
 import com.xs.booksystem.mapper.BorrowRecordMapper;
+import org.apache.catalina.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -32,6 +35,8 @@ public class BorrowRecordServiceImpl implements BorrowRecordService{
     private BorrowRecordMapper borrowRecordMapper;
     @Autowired
     private BookService bookService;
+    @Autowired
+    private UserServiceImpl userService;
     @Override
     public List<BorrowRecordVO> queryBorrowRecords(Integer userId) {
         if (BaseContext.getCurrentRole() == "ADMIN"){
@@ -44,6 +49,8 @@ public class BorrowRecordServiceImpl implements BorrowRecordService{
                 bookDTO = bookService.getBookById(bookDTO);
                 BeanUtils.copyProperties(dto, borrowRecordVO);
                 borrowRecordVO.setBookName(bookDTO.getTitle());
+                UserVO userVO = userService.getUserById(dto.getUserId());
+                borrowRecordVO.setUserName(userVO.getUsername());
                 return borrowRecordVO;
             }).collect(Collectors.toList());
             return borrowRecordVOList;

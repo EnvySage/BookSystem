@@ -19,6 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * 用户控制类
+ * 由 23053041 黄建扬 编写
+ */
 @RestController
 @RequestMapping("/user")
 public class UserController {

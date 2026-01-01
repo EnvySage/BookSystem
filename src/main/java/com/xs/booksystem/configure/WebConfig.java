@@ -12,7 +12,10 @@ import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
+/**
+ * 拦截器配置
+ * 由 罗益晖 编写
+ */
 @Configuration
 @Slf4j
 @Primary

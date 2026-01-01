@@ -38,7 +38,7 @@ mybatis-plus:
 
 jwt:
   secret: MySuperSecureJwtSecretKeyForBookSystem20251229
-  expiration: 259200
+  expiration: 2592000
 
 logging:
   level:

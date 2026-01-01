@@ -17,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+/**
+ * 管理员接口
+ * 由23053042 黄俊煜 编写
+ */
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
