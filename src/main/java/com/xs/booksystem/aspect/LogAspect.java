@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class LogAspect {
-
     // 日志级别常量
     private static final int LEVEL_BASIC = 1;     // 基本级别 - 只记录开始和结束
     private static final int LEVEL_STANDARD = 2;  // 标准级别 - 记录开始、重要操作和结束
@@ -45,39 +44,24 @@ public class LogAspect {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         String className = getSimpleClassName(joinPoint.getTarget().getClass().getSimpleName());
         String methodName = signature.getName();
-
-        // 简化方法名（去掉DTO、DO等后缀）
         String simpleMethodName = simplifyMethodName(methodName);
-
-        // 根据方法名识别操作类型
         String operationType = getOperationType(methodName);
-
         long startTime = System.currentTimeMillis();
-
-        // 根据日志级别决定是否记录开始
         if (CURRENT_LOG_LEVEL >= LEVEL_STANDARD) {
             log.info("START  {}.{}", className, simpleMethodName);
         }
-
         Object result;
         try {
-            // 执行目标方法
             result = joinPoint.proceed();
-
-            // 记录方法执行成功
             long endTime = System.currentTimeMillis();
-
-            // 根据日志级别决定记录详细程度
             if (CURRENT_LOG_LEVEL >= LEVEL_BASIC) {
                 log.info("{} {} - {}ms", operationType, simpleMethodName, (endTime - startTime));
             }
         } catch (Exception e) {
-            // 记录异常信息
             long endTime = System.currentTimeMillis();
             log.error("ERROR  {}.{} - {}ms - EXCEPTION: {}", className, simpleMethodName, (endTime - startTime), e.getMessage());
             throw e;
         }
-
         return result;
     }
 

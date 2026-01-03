@@ -21,4 +21,25 @@
         borrow_time,due_time,return_time,
         status,create_time,update_time
     </sql>
+    <select id="selectBorrowRecordWithDetails" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        br.id,
+        br.user_id,
+        br.book_id,
+        br.borrow_time,
+        br.due_time,
+        br.return_time,
+        br.status,
+        br.create_time,
+        br.update_time,
+        b.title AS book_name,
+        u.username
+        FROM borrow_record br
+        LEFT JOIN book b ON br.book_id = b.id
+        LEFT JOIN user u ON br.user_id = u.id
+        WHERE 1=1
+        <if test="userId != null">
+            AND br.user_id = #{userId}
+        </if>
+    </select>
 </mapper>

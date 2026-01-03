@@ -19,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,42 +39,22 @@ public class BorrowRecordServiceImpl implements BorrowRecordService{
     private BookService bookService;
     @Autowired
     private UserServiceImpl userService;
-    @Override
     public List<BorrowRecordVO> queryBorrowRecords(Integer userId) {
-        if (BaseContext.getCurrentRole() == "ADMIN"){
+        Map<String, Object> params = new HashMap<>();
+        if ("ADMIN".equals(BaseContext.getCurrentRole())) {
             logger.info("查询所有借阅记录");
-            List<BorrowRecordDTO> borrowRecordDTOList = borrowRecordMapper.selectList(null);
-            List<BorrowRecordVO> borrowRecordVOList = borrowRecordDTOList.stream().map(dto -> {
-                BorrowRecordVO borrowRecordVO = new BorrowRecordVO();
-                BookDTO bookDTO = new BookDTO();
-                bookDTO.setId(dto.getBookId());
-                bookDTO = bookService.getBookById(bookDTO);
-                BeanUtils.copyProperties(dto, borrowRecordVO);
-                borrowRecordVO.setBookName(bookDTO.getTitle());
-                UserVO userVO = userService.getUserById(dto.getUserId());
-                borrowRecordVO.setUserName(userVO.getUsername());
-                return borrowRecordVO;
-            }).collect(Collectors.toList());
-            return borrowRecordVOList;
-        }
-        else {
+        } else {
             logger.info("查询用户ID为 {} 的借阅记录", userId);
-            LambdaQueryWrapper<BorrowRecordDTO> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(BorrowRecordDTO::getUserId,userId);
-            List<BorrowRecordDTO> borrowRecordDTOList = borrowRecordMapper.selectList(queryWrapper);
-            List<BorrowRecordVO> borrowRecordVOList = borrowRecordDTOList.stream().map(dto -> {
-                BorrowRecordVO borrowRecordVO = new BorrowRecordVO();
-                BookDTO bookDTO = new BookDTO();
-                bookDTO.setId(dto.getBookId());
-                bookDTO = bookService.getBookById(bookDTO);
-                BeanUtils.copyProperties(dto, borrowRecordVO);
-                borrowRecordVO.setBookName(bookDTO.getTitle());
-                return borrowRecordVO;
-            }).collect(Collectors.toList());
-            logger.info("查询到 {} 条借阅记录", borrowRecordVOList.size());
-            return borrowRecordVOList;
+            params.put("userId", userId);
         }
+        // 调用新的Mapper方法，一次性获取所有需要的数据
+        List<BorrowRecordVO> borrowRecordVOList = borrowRecordMapper.selectBorrowRecordWithDetails(params);
+        if (!"ADMIN".equals(BaseContext.getCurrentRole())) {
+            logger.info("查询到 {} 条借阅记录", borrowRecordVOList.size());
+        }
+        return borrowRecordVOList;
     }
+
 
     @Transactional
     @Override

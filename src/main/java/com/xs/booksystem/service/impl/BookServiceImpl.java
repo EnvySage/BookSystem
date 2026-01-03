@@ -74,19 +74,15 @@ public class BookServiceImpl implements BookService{
     @Override
     public List<BookVO> queryBook(BookDO bookDO) {
         QueryWrapper<BookDTO> queryWrapper = new QueryWrapper<>();
-
         if (bookDO.getTitle() != null && !bookDO.getTitle().isEmpty()) {
             queryWrapper.like("title", bookDO.getTitle());
         }
-
         if (bookDO.getAuthor() != null && !bookDO.getAuthor().isEmpty()) {
             queryWrapper.like("author", bookDO.getAuthor());
         }
-
         if (bookDO.getIsbn() != null && !bookDO.getIsbn().isEmpty()) {
             queryWrapper.eq("isbn", bookDO.getIsbn());
         }
-
         if (bookDO.getCategoryId() != null) {
             queryWrapper.eq("category_id", bookDO.getCategoryId());
         }
@@ -94,11 +90,7 @@ public class BookServiceImpl implements BookService{
         if (bookDO.getPublisher() != null && !bookDO.getPublisher().isEmpty()) {
             queryWrapper.like("publisher", bookDO.getPublisher());
         }
-
-        // 执行查询
         List<BookDTO> bookDTOList = bookMapper.selectList(queryWrapper);
-
-        // 转换为VO对象并返回
         return bookDTOList.stream().map(dto -> {
             BookVO bookVO = new BookVO();
             BeanUtils.copyProperties(dto, bookVO);

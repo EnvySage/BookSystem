@@ -2,7 +2,11 @@ package com.xs.booksystem.mapper;
 
 import com.xs.booksystem.pojo.DTO.BorrowRecordDTO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xs.booksystem.pojo.VO.BorrowRecordVO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author 敛
@@ -14,4 +18,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface BorrowRecordMapper extends BaseMapper<BorrowRecordDTO> {
 
 
+    List<BorrowRecordVO> selectBorrowRecordWithDetails(Map<String, Object> params);
 }
